@@ -21,6 +21,8 @@ cd Add-SGminer-NiceHash-Miner-To-BAMT/
 
 Then review your bamt.conf and your sgminer-nicehash.conf
 
+Based on this work: https://github.com/benmagro/Add-SGminer-5-Miner-To-BAMT
+
 #Donate
 
 BTC: 1ru7JUE6LGCgmdgZgNNpwq9JPzn45hLjM
