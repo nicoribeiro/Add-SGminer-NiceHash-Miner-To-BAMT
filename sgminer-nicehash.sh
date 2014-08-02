@@ -1,6 +1,11 @@
 #!/bin/sh
 mine stop
 sleep 5
+
+# copy sgminer conf file
+cp sgminer-nicehash.conf /etc/bamt/.
+
+# Download NiceHash patched sgminer
 mkdir /opt/miners/sgminer-nicehash
 cd /opt/miners/sgminer-nicehash
 bits=$(/usr/bin/getconf LONG_BIT)
@@ -9,10 +14,10 @@ if (( $bits == 32 )); then
 else
 	file=sgminer-5.0-pre-release-2014-07-20-linux-amd64.zip
 fi
-wget https://www.nicehash.com/software/$file
+wget https://www.nicehash.com/software/$file --no-check-certificate
 unzip $file
 
-
+# patch bamt.conf
 patch /etc/bamt/bamt.conf <<.
 116a117
 >   cgminer_opts: --api-listen --config /etc/bamt/sgminer-nicehash.conf
@@ -22,7 +27,7 @@ patch /etc/bamt/bamt.conf <<.
 >   miner-sgminer-nicehash: 1
 .
 
-
+# patch common.pl
 patch /opt/bamt/common.pl <<.
 1477a1478,1480
 >       } elsif (\${\$conf}{'settings'}{'miner-sgminer-nicehash'}) {
@@ -30,12 +35,6 @@ patch /opt/bamt/common.pl <<.
 >         \$miner = "sgminer-nicehash";
 .
 
-
-cd /etc/bamt/
-mv /tmp/config.patch /etc/bamt/
-cd /etc/bamt/
-patch /etc/bamt/sgminer-5.conf < config.patch
-rm config.patch
 
 sync
 echo 'SGMiner NiceHash Installed.'
